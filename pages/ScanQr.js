@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { Text, Container, Button } from 'native-base';
 import {
     StyleSheet,
-    TouchableOpacity,
-    Linking,
     View
 } from 'react-native';
 import QRCodeScanner from 'react-native-qrcode-scanner';
@@ -12,6 +10,7 @@ export default function ScanQr(props) {
 
 
     const [value, setValue] = useState('');
+    console.log(value);
     return (
         <Container>
             <QRCodeScanner
