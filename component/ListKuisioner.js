@@ -58,11 +58,35 @@ export default function ListKuisioner() {
                     <Radio />
                 </Right>
             </ListItem>
+            <ListItem>
+                <Text>Text Area </Text>
+                <Textarea rowSpan={5} bordered placeholder="Textarea" />
+            </ListItem>
+
+            <ListItem>
+                <CheckBox checked={true} />
+                <Body>
+                    <Text>Daily Stand Up</Text>
+                </Body>
+            </ListItem>
+            <ListItem>
+                <CheckBox checked={false} />
+                <Body>
+                    <Text>Discussion with Client</Text>
+                </Body>
+            </ListItem>
+            <ListItem>
+                <CheckBox checked={false} color="green" />
+                <Body>
+                    <Text>Finish list Screen</Text>
+                </Body>
+            </ListItem>
             <Button>
                 <Text>
                     Next
                 </Text>
             </Button>
+
         </Content>
     )
 }
