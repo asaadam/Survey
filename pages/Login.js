@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, Component } from 'react';
 import { Image, AsyncStorage } from 'react-native';
-import {  View, Container, Header, Content, Form, Item, Input, Label, Button, Text } from 'native-base';
+import getTheme from '../native-base-theme/components';
+import material from '../native-base-theme/variables/material';
+import {  View, Container, Header, Content, Form, Item, Input, Label, Button, Text, StyleProvider } from 'native-base';
 
 export default function Login(props) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+
 
     async function sendLogin() {
         await AsyncStorage.setItem('token', 'token');
@@ -12,6 +15,7 @@ export default function Login(props) {
 
     }
         return (
+            <StyleProvider style={getTheme(material)}>
             <Container>
                 <Header style={{ alignItems: 'center',backgroundColor:'#004600' }}>
                     <Text style={{ color: 'white' }}>Login</Text>
@@ -39,6 +43,7 @@ export default function Login(props) {
                     </Button>
                 </Content>
             </Container>
+            </StyleProvider>
         );
 }
 
