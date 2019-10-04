@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Image, AsyncStorage } from 'react-native';
-import {  View, Container, Header, Content, Form, Item, Input, Label, Button, Text, } from 'native-base';
+import {  View, Container, Header, Content, Form, Item, Input, Label, Button, Text } from 'native-base';
+
 export default function Login(props) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -17,7 +18,7 @@ export default function Login(props) {
                 </Header>
 
                 <Content style={{ padding: 16 }}>
-                    <View>
+                    <View style={{justifyContent: 'center',alignItems: 'center'}}>
                         <Image
                             style={{width: 150, height: 150}}
                             source={{uri: 'https://www.pertanian.go.id/img/logo.png'}}
