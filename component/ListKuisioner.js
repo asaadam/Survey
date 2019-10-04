@@ -1,8 +1,5 @@
 import React from 'react';
-import { Text, Content, ListItem, Radio, Right, Left, Container, View, Button } from 'native-base';
-
-
-
+import { Text, Content, ListItem, Radio, Right, Left, View, Button, Input, CheckBox, Body } from 'native-base';
 
 
 // function kuisionerFInish() {
@@ -60,7 +57,7 @@ export default function ListKuisioner() {
             </ListItem>
             <ListItem>
                 <Text>Text Area </Text>
-                <Textarea rowSpan={5} bordered placeholder="Textarea" />
+                <Input rowSpan={5} bordered placeholder="Textarea" />
             </ListItem>
 
             <ListItem>

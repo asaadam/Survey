@@ -1,44 +1,44 @@
 import React, { useState } from 'react';
-import { StyleSheet, AsyncStorage } from 'react-native';
-import { Container, Header, Content, Form, Item, Input, Label, Button, Text } from 'native-base';
+import { Image, AsyncStorage } from 'react-native';
+import {  View, Container, Header, Content, Form, Item, Input, Label, Button, Text, } from 'native-base';
 export default function Login(props) {
-
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-
-
 
     async function sendLogin() {
         await AsyncStorage.setItem('token', 'token');
         props.navigation.navigate('Home');
+
     }
+        return (
+            <Container>
+                <Header style={{ alignItems: 'center',backgroundColor:'#004600' }}>
+                    <Text style={{ color: 'white' }}>Login</Text>
+                </Header>
 
-    return (
-        <Container >
-            <Header style={{ alignItems: 'center' }}>
-                <Text style={{ color: 'white' }}>Login</Text>
-
-            </Header>
-            <Content style={{ padding: 16 }}>
-                <Form>
-                    <Item floatingLabel>
-                        <Label>Username</Label>
-                        <Input />
-                    </Item>
-                    <Item floatingLabel last>
-                        <Label>Password</Label>
-                        <Input />
-                    </Item>
-
-                </Form>
-                <Button onPress={sendLogin} style={{ marginTop: 20, justifyContent: 'center' }}>
-                    <Text>Login</Text>
-                </Button>
-            </Content>
-        </Container>
-    )
-
-
+                <Content style={{ padding: 16 }}>
+                    <View>
+                        <Image
+                            style={{width: 150, height: 150}}
+                            source={{uri: 'https://www.pertanian.go.id/img/logo.png'}}
+                        />
+                    </View>
+                    <Form>
+                        <Item floatingLabel>
+                            <Label>Username</Label>
+                            <Input />
+                        </Item>
+                        <Item floatingLabel last>
+                            <Label>Password</Label>
+                            <Input />
+                        </Item>
+                    </Form>
+                    <Button onPress={sendLogin} style={{ marginTop: 20, justifyContent: 'center',backgroundColor:'#004600'}}>
+                        <Text>Login</Text>
+                    </Button>
+                </Content>
+            </Container>
+        );
 }
 
 // const style = StyleSheet.create({
