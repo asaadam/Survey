@@ -1,35 +1,112 @@
-import React, { useEffect } from 'react';
-import { Text, Button, View, AsyncStorage, FlatList, StyleSheet } from 'react-native';
-import ListData from '../component/ListData';
+import React, { useEffect, useState } from 'react';
+import { Text, Button, View, AsyncStorage, FlatList, StyleSheet,TouchableOpacity } from 'react-native';
+import Axios from 'axios';
+import { Spinner,Card,CardItem } from 'native-base';
+
+function ListData(props) {
+    const [data, setData] = useState({});
+
+    useEffect(() => {
+        setData(props);
+    }, []);
+    if (data.data === undefined){
+        return(
+            <TouchableOpacity onPress={() => data.navigation.push('choosePage')}>
+            <Card >
+                <CardItem >
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-around', flex: 1 }}>
+                        <Text>
+                            Undefined
+                        </Text>
+                        <Text>Undefined</Text>
+                    </View>
+                </CardItem>
+            </Card>
+        </TouchableOpacity>
+        )
+    }
+    else{
+        return (
+            <TouchableOpacity onPress={() => data.navigation.push('choosePage')}>
+                <Card >
+                    <CardItem >
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-around', flex: 1 }}>
+                            <Text>
+                                {data.data.item.desa}
+                                test
+                            </Text>
+                            <Text>{data.data.item.nama_kios}
+                            </Text>
+                        </View>
+                    </CardItem>
+                </Card>
+            </TouchableOpacity>
+        )
+    }
+    
+
+}
 
 export default function Login(props) {
 
 
+    let [kios, setKios] = useState([
+        {
+            id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+            title: 'First Item',
+        },
+        {
+            id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
+            title: 'Second Item',
+        },
+        {
+            id: '58694a0f-3da1-471f-bd96-145571e29d72',
+            title: 'Third Item',
+        },
+    ]);
+    let [loading, setLoading] = useState(false);
     async function logout() {
         await AsyncStorage.removeItem('token');
 
         props.navigation.navigate('Login');
     }
+
+
+
+    async function getData() {
+        setLoading(true);
+        let data = await Axios.get("http://202.149.70.33/api/tampilkan_kiosJSON");
+        setKios(data.data.data);
+        setLoading(false);
+    }
+
+
+    useEffect(() => {
+        getData();
+    }, []);
+
     return (
-        <View style={{padding:16}}>
-            <FlatList
-                data={[
-                    { key:'1',Desa: 'Desa A',Kios:'Kios A' },
-                    { key:'2',Desa: '2',Kios:'2' },
-                    { key:'3',Desa: '3',Kios:'3' },
-                    { key:'4',Desa: '4',Kios:'4' },
-                    { key:'5',Desa: '5',Kios:'5' },
+        <View style={{ padding: 16 }}>
+            {loading ? <Spinner /> :
+                <View>
+                    <FlatList
+                        data={kios}
+                        renderItem={(data) => {
+                            return (
+                                <ListData style={styles.item} data={data}></ListData>)
+                        }}
+                    />
 
-                ]}
-                renderItem={({ item }) => <ListData style={styles.item} data={item}></ListData>}
-            />
+                    <Button
+                        title="Logout"
+                        onPress={() => logout()}
+                    />
+                </View>
+            }
 
-            <Button
-                title="Logout"
-                onPress={() => logout()}
-            />
         </View>
     )
+
 
 
 }
