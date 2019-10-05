@@ -2,12 +2,10 @@ import React, { useState, Component } from 'react';
 import { Image, AsyncStorage } from 'react-native';
 import getTheme from '../native-base-theme/components';
 import material from '../native-base-theme/variables/material';
-import {  View, Container, Header, Content, Form, Item, Input, Label, Button, Text, StyleProvider } from 'native-base';
-
+import {  StyleProvider,View, Container, Header, Content, Form, Item, Input, Label, Button, Text, } from 'native-base';
 export default function Login(props) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-
 
     async function sendLogin() {
         await AsyncStorage.setItem('token', 'token');
@@ -17,14 +15,13 @@ export default function Login(props) {
         return (
             <StyleProvider style={getTheme(material)}>
             <Container>
-                <Header style={{ alignItems: 'center',backgroundColor:'#004600' }}>
+                <Header style={{ alignItems: 'center',backgroundColor:'#2C7744'}}>
                     <Text style={{ color: 'white' }}>Login</Text>
                 </Header>
-
                 <Content style={{ padding: 16 }}>
-                    <View style={{justifyContent: 'center',alignItems: 'center'}}>
+                    <View style={{justifyContent: 'center', alignItems: 'center'}}>
                         <Image
-                            style={{width: 150, height: 150}}
+                            style={{width: 150, height: 150, justifyContent: 'center', alignItems: 'center'}}
                             source={{uri: 'https://www.pertanian.go.id/img/logo.png'}}
                         />
                     </View>
@@ -38,7 +35,7 @@ export default function Login(props) {
                             <Input />
                         </Item>
                     </Form>
-                    <Button onPress={sendLogin} style={{ marginTop: 20, justifyContent: 'center',backgroundColor:'#004600'}}>
+                    <Button onPress={sendLogin} style={{ marginTop: 20, justifyContent: 'center',backgroundColor:'#2C7744'}}>
                         <Text>Login</Text>
                     </Button>
                 </Content>

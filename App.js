@@ -1,7 +1,4 @@
-
-
 import React from 'react';
-
 import {
   createSwitchNavigator,
   createAppContainer,
@@ -22,11 +19,12 @@ const Main = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: "Home Screen",
       headerRight: (
-        <Button onPress={()=>{
-          navigation.push('draftPage')
-        }}>
-          <Text>Draft</Text>
-        </Button>
+          <Button
+              onPress={()=>{navigation.push('draftPage')}}
+              style={{position: 'relative',borderRadius: 15,backgroundColor:'#2C7744', right: 10}}
+          >
+            <Text>Draft</Text>
+          </Button>
       )
     })
   },
