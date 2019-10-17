@@ -1,16 +1,21 @@
 import React from 'react';
 import { Text, Container, Content, Card, CardItem, Body, View } from 'native-base';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, Button } from 'react-native';
+
+import AsyncStorage from '@react-native-community/async-storage';
+
+
 
 function createCard(data, props) {
+
     let onPress;
     if (data === 'kios') {
         onPress = () => {
-            props.navigation.push('scanQrPage')
+            props.navigation.push('homePage');
         }
     }
     else {
-        onPress = ()=>{
+        onPress = () => {
             props.navigation.push('kuisionerPage');
         }
     }
@@ -31,6 +36,11 @@ function createCard(data, props) {
 }
 
 export default function Choose(props) {
+    async function logout() {
+        await AsyncStorage.removeItem('token');
+
+        props.navigation.navigate('Login');
+    }
     return (
         <Container >
             <Content style={{ padding: 16 }}>
@@ -44,6 +54,11 @@ export default function Choose(props) {
 
                     {createCard('Kelompok Tani', props)}
                 </View>
+                <Button
+                    title="Logout"
+                    onPress={() => logout()}
+                >
+                </Button>
             </Content>
         </Container>
 

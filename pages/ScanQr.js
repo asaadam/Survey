@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Text, Container, Button } from 'native-base';
 import {
     StyleSheet,
@@ -9,17 +9,25 @@ import QRCodeScanner from 'react-native-qrcode-scanner';
 export default function ScanQr(props) {
 
 
-    const [value, setValue] = useState('');
-    console.log(value);
+
+    const [data, setData] = useState('');
+    
+    useEffect(() => {
+        setData(props.navigation.getParam('data'));
+    }, []);
     return (
         <Container>
             <QRCodeScanner
-                onRead={(value) => { setValue(value) }}
+                onRead={(value) => { if(value.data!=data.kode_qr){
+                    alert("Wrong qr Code");
+                } 
+                else{
+                    props.navigation.push('kuisionerPage')
+                }
+                }}
                 bottomContent={
                     <View>
-                        <Text>
-                            {value.data}
-                        </Text>
+                   
                         <Button onPress={() => props.navigation.goBack()}>
                             <Text>
                                 Back To Choose Page

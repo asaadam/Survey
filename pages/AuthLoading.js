@@ -1,14 +1,15 @@
-import { AsyncStorage, View, Text } from 'react-native';
+import { View, Text } from 'react-native';
 import React, { useEffect } from 'react';
+import AsyncStorage from '@react-native-community/async-storage';
 import { Spinner } from 'native-base';
 
 export default function AuthLoadingChildren(props) {
 
-    useEffect(()=>{
+    useEffect(() => {
         getToken();
     })
 
-    getToken = async ()=>{
+    getToken = async () => {
         let userToken = await AsyncStorage.getItem('token');
         if (!userToken) {
             props.navigation.navigate('Login');
@@ -20,7 +21,7 @@ export default function AuthLoadingChildren(props) {
 
     return (
         <View>
-                     <Spinner />
+            <Spinner />
             <Text>Check your login status....</Text>
         </View>
     )

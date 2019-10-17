@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Image, AsyncStorage } from 'react-native';
+import { Image } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import getTheme from '../native-base-theme/components';
 import material from '../native-base-theme/variables/material';
 import {  StyleProvider,View, Container, Header, Content, Form, Item, Input, Label, Button, Text, } from 'native-base';
