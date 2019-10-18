@@ -13,7 +13,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 import Choose from './pages/Choose';
 import ScanQr from './pages/ScanQr';
 import Draft from './pages/Draft';
-import { Button, Text, Root, View, Toast } from 'native-base';
+import { Button, Text, Root, Toast } from 'native-base';
 import Kuisioner from './pages/Kuisioner';
 import NetInfo from "@react-native-community/netinfo";
 import AsyncStorage from '@react-native-community/async-storage';
@@ -62,11 +62,12 @@ const Container = createAppContainer(MainSwitch);
 
 const App = () => {
 
-  // let [kios,setKios]=useState([]);
 
   async function getData() {
     let data = await Axios.get("http://202.149.70.33/api/tampilkan_kiosJSON");
     await AsyncStorage.setItem('kios', JSON.stringify(data));
+    let soal = await Axios.get("http://202.149.70.33/api/tampilkan_kuisionerJSON");
+    await AsyncStorage.setItem('soal',JSON.stringify(soal.data));
   }
 
   let [internet, setInternet] = useState(false);
