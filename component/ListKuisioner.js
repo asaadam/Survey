@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Text, Content, ListItem, Radio, Right, Left, View, Button, Input, CheckBox, Body } from 'native-base';
-
+import { BackHandler } from "react-native";
 import AsyncStorage from '@react-native-community/async-storage';
 
 
@@ -70,7 +70,7 @@ function RenderSoal(props) {
                 <View>
                     <ListItem>
                         <Text>Answer </Text>
-                        <Input  bordered />
+                        <Input bordered />
                     </ListItem>
                 </View>)
         case 'checkbox':
@@ -107,30 +107,50 @@ function RenderSoal(props) {
 }
 
 
-export default function ListKuisioner() {
+export default function ListKuisioner(props) {
     let [soal, setSoal] = useState();
     let [counter, setCounter] = useState(0);
+
     async function getData() {
-        let data = await AsyncStorage.getItem('soal');
+        let data = await AsyncStorage.getItem(props.type);
         let parse = JSON.parse(data);
         setSoal(parse);
     }
+
+    function backButtonHandler() {
+        if (counter == 0) {
+            return false;
+        }
+        else {
+            setCounter(--counter);
+            return true;
+        }
+    }
     useEffect(() => {
+        BackHandler.addEventListener("hardwareBackPress", backButtonHandler)
+        return () => {
+            BackHandler.removeEventListener("hardwareBackPress", backButtonHandler);
+        }
+    })
+    useEffect(() => {
+       
         getData();
-    }, [])
-    if (soal) {
+    }, []);
+    if (soal != undefined) {
         return (
-            <Content style={{padding:16}}>
-            <Text>Pertanyaan ke {counter+1}</Text>
+            <Content style={{ padding: 16 }}>
+                <Text>Pertanyaan ke {counter + 1}</Text>
                 <Text>
-                    {soal.data[counter].pertanyaan_kuisioner}
+                    {soal[counter].pertanyaan_kuisioner}
                 </Text>
-                <RenderSoal data={soal.data[counter]} />
+                <RenderSoal data={soal[counter]} />
                 <Button onPress={() => {
-                    setCounter(counter++);
-                }}><Text>
+                    setCounter(++counter);
+                }}>
+                    <Text>
                         Next
-                </Text></Button>
+                </Text>
+                </Button>
             </Content>
         )
     }

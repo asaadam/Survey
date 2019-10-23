@@ -16,12 +16,13 @@ function createCard(data, props) {
     }
     else {
         onPress = () => {
-            props.navigation.push('kuisionerPage');
+            props.navigation.push('kuisionerPage',{
+                type:data
+            });
         }
     }
     return (
         <TouchableOpacity onPress={() => onPress()}>
-
             <Card>
                 <CardItem>
                     <Body>
@@ -38,7 +39,6 @@ function createCard(data, props) {
 export default function Choose(props) {
     async function logout() {
         await AsyncStorage.removeItem('token');
-
         props.navigation.navigate('Login');
     }
     return (

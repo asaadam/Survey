@@ -57,9 +57,6 @@ const MainSwitch = createSwitchNavigator({
 const Container = createAppContainer(MainSwitch);
 
 
-
-
-
 const App = () => {
 
 
@@ -67,7 +64,30 @@ const App = () => {
     let data = await Axios.get("http://202.149.70.33/api/tampilkan_kiosJSON");
     await AsyncStorage.setItem('kios', JSON.stringify(data));
     let soal = await Axios.get("http://202.149.70.33/api/tampilkan_kuisionerJSON");
-    await AsyncStorage.setItem('soal',JSON.stringify(soal.data));
+   let soalKios=[];
+   let soalPetani=[];
+   let soalPenyuluh=[];
+   let soalKelompokTani=[];
+   soal.data.data.filter(soal => {
+    if (soal.nama_kategori_kuisioner === "Kios"){
+      soalKios.push(soal);
+    } 
+    else if (soal.nama_kategori_kuisioner === "Petani"){
+      soalPetani.push(soal);
+    }
+    else if (soal.nama_kategori_kuisioner === "Penyuluh"){
+      soalPenyuluh.push(soal);
+    }
+    else if (soal.nama_kategori_kuisioner === "Kelompok Tani"){
+      soalKelompokTani.push(soal);
+    }
+   });
+  
+    await AsyncStorage.setItem('soalKios', JSON.stringify(soalKios));
+    await AsyncStorage.setItem('soalPetani', JSON.stringify(soalPetani));
+    await AsyncStorage.setItem('soalPenyuluh', JSON.stringify(soalPenyuluh));
+    await AsyncStorage.setItem('soalKelompokTani', JSON.stringify(soalKelompokTani));
+
   }
 
   let [internet, setInternet] = useState(false);

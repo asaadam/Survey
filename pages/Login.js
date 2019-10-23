@@ -3,12 +3,18 @@ import { Image } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import getTheme from '../native-base-theme/components';
 import material from '../native-base-theme/variables/material';
+import Axios from 'axios';
 import {  StyleProvider,View, Container, Header, Content, Form, Item, Input, Label, Button, Text, } from 'native-base';
 export default function Login(props) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-
+    const URL_LOGIN="http://202.149.70.33/api/login_check";
     async function sendLogin() {
+    //    const data = await Axios.post(URL_LOGIN,{
+    //     username:username,
+    //     password:password
+    //     });
+    //     connsole.log(data);
         await AsyncStorage.setItem('token', 'token');
         props.navigation.navigate('Home');
 
