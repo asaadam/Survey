@@ -32,6 +32,4 @@ export default function Kuisioner(props) {
             <Text>Loading...</Text>
         )
     }
-
-
 }

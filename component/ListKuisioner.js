@@ -4,16 +4,14 @@ import { BackHandler } from "react-native";
 import AsyncStorage from '@react-native-community/async-storage';
 
 
-function RenderSoal(props) {
-
-
-    switch (props.data.jenis_pertanyaan) {
+function RenderSpesificSoal(jenis, pilihan) {
+    switch (jenis) {
         case 'pilihan_ganda':
             return (
                 <View>
                     <ListItem>
                         <Left>
-                            <Text>{props.data.pilihanA}</Text>
+                            <Text>{pilihan.pilihanA}</Text>
                         </Left>
                         <Right>
                             <Radio />
@@ -21,7 +19,7 @@ function RenderSoal(props) {
                     </ListItem>
                     <ListItem>
                         <Left>
-                            <Text>{props.data.pilihanB}</Text>
+                            <Text>{pilihan.pilihanB}</Text>
                         </Left>
                         <Right>
                             <Radio />
@@ -29,7 +27,7 @@ function RenderSoal(props) {
                     </ListItem>
                     <ListItem>
                         <Left>
-                            <Text>{props.data.pilihanC}</Text>
+                            <Text>{pilihan.pilihanC}</Text>
                         </Left>
                         <Right>
                             <Radio />
@@ -37,7 +35,7 @@ function RenderSoal(props) {
                     </ListItem>
                     <ListItem>
                         <Left>
-                            <Text>{props.data.pilihanD}</Text>
+                            <Text>{pilihan.pilihanD}</Text>
                         </Left>
                         <Right>
                             <Radio />
@@ -79,30 +77,71 @@ function RenderSoal(props) {
                     <ListItem>
                         <CheckBox checked={true} />
                         <Body>
-                            <Text>{props.data.pilihanCB1}</Text>
+                            <Text>{pilihan.pilihanCB1}</Text>
                         </Body>
                     </ListItem>
                     <ListItem>
                         <CheckBox checked={false} />
                         <Body>
-                            <Text>{props.data.pilihanCB2}</Text>
+                            <Text>{pilihan.pilihanCB2}</Text>
                         </Body>
                     </ListItem>
                     <ListItem>
                         <CheckBox checked={false} />
                         <Body>
-                            <Text>{props.data.pilihanCB3}</Text>
+                            <Text>{pilihan.pilihanCB3}</Text>
                         </Body>
                     </ListItem>
                     <ListItem>
                         <CheckBox checked={false} />
                         <Body>
-                            <Text>{props.data.pilihanCB4}</Text>
+                            <Text>{pilihan.pilihanCB4}</Text>
                         </Body>
                     </ListItem>
                 </View>
             )
     }
+}
+
+
+function RenderSoal(props) {
+
+    let [answer, setAnswer] = useState([]);
+    let [counter, setCounter] = useState(0);
+    const RenderButton= ()=>{
+        if (counter === props.data.length-1){
+            return (
+                <Button onPress={() => {
+                        alert("Submited");
+                }}>
+                    <Text>
+                        Submit
+                        </Text>
+                </Button>
+            )
+        }
+        else {
+            return (
+                <Button onPress={() => {
+                    setCounter(++counter);
+                }}>
+                    <Text>
+                        Next
+                        </Text>
+                </Button>
+            )
+        }
+    }
+    return (
+        <View>
+            <Text>Pertanyaan ke {counter + 1}</Text>
+            <Text>
+                {props.data[counter].pertanyaan_kuisioner}
+            </Text>
+            {RenderSpesificSoal(props.data[counter].jenis_pertanyaan, props.data[counter])}
+            <RenderButton/>
+        </View>
+    )
 
 }
 
@@ -133,24 +172,15 @@ export default function ListKuisioner(props) {
         }
     })
     useEffect(() => {
-       
+
         getData();
     }, []);
     if (soal != undefined) {
         return (
             <Content style={{ padding: 16 }}>
-                <Text>Pertanyaan ke {counter + 1}</Text>
-                <Text>
-                    {soal[counter].pertanyaan_kuisioner}
-                </Text>
-                <RenderSoal data={soal[counter]} />
-                <Button onPress={() => {
-                    setCounter(++counter);
-                }}>
-                    <Text>
-                        Next
-                </Text>
-                </Button>
+
+                <RenderSoal data={soal} />
+
             </Content>
         )
     }
