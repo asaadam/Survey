@@ -5,6 +5,35 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 
 function RenderSpesificSoal(jenis, pilihan) {
+
+    let [answer, setAnswer] = useState([]);
+    let [counter, setCounter] = useState(0);
+
+
+    const RenderButton = () => {
+        if (counter === props.data.length - 1) {
+            return (
+                <Button onPress={() => {
+                    alert("Submited");
+                }}>
+                    <Text>
+                        Submit
+                        </Text>
+                </Button>
+            )
+        }
+        else {
+            return (
+                <Button onPress={() => {
+                    setCounter(++counter);
+                }}>
+                    <Text>
+                        Next
+                        </Text>
+                </Button>
+            )
+        }
+    }
     switch (jenis) {
         case 'pilihan_ganda':
             return (
@@ -41,6 +70,7 @@ function RenderSpesificSoal(jenis, pilihan) {
                             <Radio />
                         </Right>
                     </ListItem>
+                    <RenderButton />
                 </View>)
         case 'yesno':
             return (
@@ -61,6 +91,8 @@ function RenderSpesificSoal(jenis, pilihan) {
                             <Radio />
                         </Right>
                     </ListItem>
+                    <RenderButton />
+
                 </View>
             )
         case 'isian':
@@ -68,8 +100,12 @@ function RenderSpesificSoal(jenis, pilihan) {
                 <View>
                     <ListItem>
                         <Text>Answer </Text>
-                        <Input bordered />
+                        <Input bordered onChange={(answerData) => {
+                            setAnswer(...answer, answerData);
+                        }} />
                     </ListItem>
+                    <RenderButton />
+
                 </View>)
         case 'checkbox':
             return (
@@ -98,6 +134,8 @@ function RenderSpesificSoal(jenis, pilihan) {
                             <Text>{pilihan.pilihanCB4}</Text>
                         </Body>
                     </ListItem>
+                    <RenderButton />
+
                 </View>
             )
     }
@@ -108,54 +146,13 @@ function RenderSoal(props) {
 
     let [answer, setAnswer] = useState([]);
     let [counter, setCounter] = useState(0);
-    const RenderButton= ()=>{
-        if (counter === props.data.length-1){
-            return (
-                <Button onPress={() => {
-                        alert("Submited");
-                }}>
-                    <Text>
-                        Submit
-                        </Text>
-                </Button>
-            )
+
+    useEffect(() => {
+        BackHandler.addEventListener("hardwareBackPress", backButtonHandler)
+        return () => {
+            BackHandler.removeEventListener("hardwareBackPress", backButtonHandler);
         }
-        else {
-            return (
-                <Button onPress={() => {
-                    setCounter(++counter);
-                }}>
-                    <Text>
-                        Next
-                        </Text>
-                </Button>
-            )
-        }
-    }
-    return (
-        <View>
-            <Text>Pertanyaan ke {counter + 1}</Text>
-            <Text>
-                {props.data[counter].pertanyaan_kuisioner}
-            </Text>
-            {RenderSpesificSoal(props.data[counter].jenis_pertanyaan, props.data[counter])}
-            <RenderButton/>
-        </View>
-    )
-
-}
-
-
-export default function ListKuisioner(props) {
-    let [soal, setSoal] = useState();
-    let [counter, setCounter] = useState(0);
-
-    async function getData() {
-        let data = await AsyncStorage.getItem(props.type);
-        let parse = JSON.parse(data);
-        setSoal(parse);
-    }
-
+    });
     function backButtonHandler() {
         if (counter == 0) {
             return false;
@@ -165,14 +162,30 @@ export default function ListKuisioner(props) {
             return true;
         }
     }
-    useEffect(() => {
-        BackHandler.addEventListener("hardwareBackPress", backButtonHandler)
-        return () => {
-            BackHandler.removeEventListener("hardwareBackPress", backButtonHandler);
-        }
-    })
-    useEffect(() => {
+    return (
+        <View>
+            <Text>Pertanyaan ke {counter + 1}</Text>
+            <Text>
+                {props.data[counter].pertanyaan_kuisioner}
+            </Text>
+            {RenderSpesificSoal(props.data[counter].jenis_pertanyaan, props.data[counter])}
+        </View>
+    )
 
+}
+
+
+export default function ListKuisioner(props) {
+    let [soal, setSoal] = useState();
+
+    async function getData() {
+        let data = await AsyncStorage.getItem(props.type);
+        let parse = JSON.parse(data);
+        setSoal(parse);
+    }
+
+
+    useEffect(() => {
         getData();
     }, []);
     if (soal != undefined) {

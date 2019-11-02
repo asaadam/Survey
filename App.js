@@ -1,7 +1,4 @@
-
-
 import React, { useEffect, useState } from 'react';
-
 import {
   createSwitchNavigator,
   createAppContainer,
@@ -18,6 +15,8 @@ import Kuisioner from './pages/Kuisioner';
 import NetInfo from "@react-native-community/netinfo";
 import AsyncStorage from '@react-native-community/async-storage';
 import Axios from 'axios';
+import FormDataPenyuluh from './pages/FormDataPenyuluh';
+import FormDataKelompokTani from './pages/FormDataKelompokTani';
 const Main = createStackNavigator({
   choosePage: {
     screen: Choose,
@@ -44,6 +43,12 @@ const Main = createStackNavigator({
   },
   kuisionerPage: {
     screen: Kuisioner
+  },
+ FormDataKelompokTani: {
+    screen:FormDataKelompokTani
+  },
+  FormDataPenyuluh:{
+    screen: FormDataPenyuluh
   }
 })
 const MainSwitch = createSwitchNavigator({
@@ -52,14 +57,9 @@ const MainSwitch = createSwitchNavigator({
   Home: Main
 });
 
-
-
 const Container = createAppContainer(MainSwitch);
 
-
 const App = () => {
-
-
   async function getData() {
     let data = await Axios.get("http://202.149.70.33/api/tampilkan_kiosJSON");
     await AsyncStorage.setItem('kios', JSON.stringify(data));
@@ -82,12 +82,10 @@ const App = () => {
       soalKelompokTani.push(soal);
     }
    });
-  
     await AsyncStorage.setItem('soalKios', JSON.stringify(soalKios));
     await AsyncStorage.setItem('soalPetani', JSON.stringify(soalPetani));
     await AsyncStorage.setItem('soalPenyuluh', JSON.stringify(soalPenyuluh));
     await AsyncStorage.setItem('soalKelompokTani', JSON.stringify(soalKelompokTani));
-
   }
 
   let [internet, setInternet] = useState(false);
