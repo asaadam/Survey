@@ -29,7 +29,7 @@ function RenderSpesificSoal(jenis, pilihan, onAnswer, onNext,checkQuestionNumber
     let [answer, setAnswer] = useState(DEFAULT_CHECKBOX);
     let [test, setTest] = useState(false);
     let [radio,setRadio]=useState(DEFAULT_RADIO);
-
+    let [essay,setEssay]=useState('');
 
     const RenderButton = () => {
         if (!checkQuestionNumber) {
@@ -48,6 +48,7 @@ function RenderSpesificSoal(jenis, pilihan, onAnswer, onNext,checkQuestionNumber
                 <Button onPress={() => {
                     setRadio(DEFAULT_RADIO);
                     setAnswer(DEFAULT_CHECKBOX);
+                    setEssay('');
                 return onNext();
                 }}>
                     <Text>
@@ -146,8 +147,9 @@ function RenderSpesificSoal(jenis, pilihan, onAnswer, onNext,checkQuestionNumber
                     <ListItem>
                         <Text>Answer </Text>
                         <Input bordered onChangeText={data => {
+                            setEssay(data);
                             return onAnswer(data);
-                        }} />
+                        }} value={essay}/>
                     </ListItem>
                     <RenderButton />
                 </View>)
