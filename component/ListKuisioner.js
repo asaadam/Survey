@@ -5,7 +5,6 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 
 function RenderSpesificSoal(jenis, pilihan, onAnswer, onNext, checkQuestionNumber, answerData) {
-    console.log(answerData);
     const DEFAULT_CHECKBOX = [
         {
             key: '0',
@@ -33,7 +32,6 @@ function RenderSpesificSoal(jenis, pilihan, onAnswer, onNext, checkQuestionNumbe
     let [radio, setRadio] = useState(DEFAULT_RADIO);
     let [radioFour, setRadioFour] = useState(DEFAULT_RADIO_FOUR);
     let [essay, setEssay] = useState('');
-
     useEffect(() => {
         if (answerData != null) {
             switch (answerData.tipe) {
@@ -45,7 +43,7 @@ function RenderSpesificSoal(jenis, pilihan, onAnswer, onNext, checkQuestionNumbe
                     setRadioFour(answerData.answer)
                     setTest(!test)
                     break;
-                case "yesno": setRadio(answer.answer)
+                case "yesno": setRadio(answerData.answer)
                     setTest(!test)
                     break;
                 default: setEssay(answerData.answer)
@@ -56,7 +54,7 @@ function RenderSpesificSoal(jenis, pilihan, onAnswer, onNext, checkQuestionNumbe
 
     }, [answerData]);
 
-    
+
     const RenderButton = () => {
         if (!checkQuestionNumber) {
             return (
@@ -306,6 +304,7 @@ function RenderSoal(props) {
     }
 
     function onAnswer(data) {
+        console.log(data);
         let item = {
             tipe: props.data[counter].jenis_pertanyaan,
             answer: data
@@ -318,7 +317,7 @@ function RenderSoal(props) {
             <Text>
                 {props.data[counter].pertanyaan_kuisioner}
             </Text>
-            {RenderSpesificSoal(props.data[counter].jenis_pertanyaan, props.data[counter], onAnswer, onNext, checkQuestionNumber(),answer[counter])}
+            {RenderSpesificSoal(props.data[counter].jenis_pertanyaan, props.data[counter], onAnswer, onNext, checkQuestionNumber(), answer[counter])}
 
         </View>
     )
