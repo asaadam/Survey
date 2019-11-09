@@ -4,7 +4,33 @@ import { BackHandler } from "react-native";
 import AsyncStorage from '@react-native-community/async-storage';
 
 
-function RenderSpesificSoal(jenis, pilihan, onAnswer) {
+function RenderSpesificSoal(jenis, pilihan, onAnswer, onNext,checkQuestionNumber) {
+    console.log(checkQuestionNumber);
+    const RenderButton = () => {
+        if (!checkQuestionNumber) {
+            return (
+                <Button onPress={() => {
+                    alert("Submited");
+                }}>
+                    <Text>
+                        Submit
+                        </Text>
+                </Button>
+            )
+        }
+        else {
+            return (
+                <Button onPress={() => {
+                return onNext();
+                }}>
+                    <Text>
+                        Next
+                        </Text>
+                </Button>
+            )
+        }
+        
+    }
 
     let [answer, setAnswer] = useState([
         {
@@ -70,6 +96,7 @@ function RenderSpesificSoal(jenis, pilihan, onAnswer) {
                             }} />
                         </Right>
                     </ListItem>
+                    <RenderButton />
                 </View>)
         case 'yesno':
             return (
@@ -94,7 +121,7 @@ function RenderSpesificSoal(jenis, pilihan, onAnswer) {
                             }} />
                         </Right>
                     </ListItem>
-
+                    <RenderButton />
                 </View>
             )
         case 'isian':
@@ -106,7 +133,7 @@ function RenderSpesificSoal(jenis, pilihan, onAnswer) {
                             return onAnswer(data);
                         }} />
                     </ListItem>
-
+                    <RenderButton />
                 </View>)
         case 'checkbox':
 
@@ -160,7 +187,7 @@ function RenderSpesificSoal(jenis, pilihan, onAnswer) {
                             <Text>{pilihan.pilihanCB4}</Text>
                         </Body>
                     </ListItem>
-
+                    <RenderButton />
                 </View>
             )
     }
@@ -187,29 +214,18 @@ function RenderSoal(props) {
             return true;
         }
     }
-    const RenderButton = () => {
-        if (counter === props.data.length - 1) {
-            return (
-                <Button onPress={() => {
-                    alert("Submited");
-                }}>
-                    <Text>
-                        Submit
-                        </Text>
-                </Button>
-            )
+
+    function checkQuestionNumber(){
+        if (counter === props.data.length-1){
+            return false;
         }
-        else {
-            return (
-                <Button onPress={() => {
-                    setCounter(++counter);
-                }}>
-                    <Text>
-                        Next
-                        </Text>
-                </Button>
-            )
+        else{
+            return true;
         }
+    }
+
+    function onNext() {
+        setCounter(++counter);
     }
 
     function onAnswer(data) {
@@ -221,8 +237,7 @@ function RenderSoal(props) {
             <Text>
                 {props.data[counter].pertanyaan_kuisioner}
             </Text>
-            {RenderSpesificSoal(props.data[counter].jenis_pertanyaan, props.data[counter], onAnswer)}
-            <RenderButton />
+            {RenderSpesificSoal(props.data[counter].jenis_pertanyaan, props.data[counter], onAnswer, onNext,checkQuestionNumber())}
 
         </View>
     )
