@@ -5,34 +5,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 
 function RenderSpesificSoal(jenis, pilihan, onAnswer, onNext,checkQuestionNumber) {
-    console.log(checkQuestionNumber);
-    const RenderButton = () => {
-        if (!checkQuestionNumber) {
-            return (
-                <Button onPress={() => {
-                    alert("Submited");
-                }}>
-                    <Text>
-                        Submit
-                        </Text>
-                </Button>
-            )
-        }
-        else {
-            return (
-                <Button onPress={() => {
-                return onNext();
-                }}>
-                    <Text>
-                        Next
-                        </Text>
-                </Button>
-            )
-        }
-        
-    }
-
-    let [answer, setAnswer] = useState([
+    const DEFAULT_CHECKBOX =[
         {
             key: '0',
             value: false
@@ -49,8 +22,38 @@ function RenderSpesificSoal(jenis, pilihan, onAnswer, onNext,checkQuestionNumber
             key: '3',
             value: false
         },
-    ]);
+    ]
+   
+
+    let [answer, setAnswer] = useState(DEFAULT_CHECKBOX);
     let [test, setTest] = useState(false);
+
+
+    const RenderButton = () => {
+        if (!checkQuestionNumber) {
+            return (
+                <Button onPress={() => {
+                    alert("Submited");
+                }}>
+                    <Text>
+                        Submit
+                        </Text>
+                </Button>
+            )
+        }
+        else {
+            return (
+                <Button onPress={() => {
+                    setAnswer(DEFAULT_CHECKBOX)
+                return onNext();
+                }}>
+                    <Text>
+                        Next
+                        </Text>
+                </Button>
+            )
+        }        
+    }    
     switch (jenis) {
 
         case 'pilihan_ganda':
@@ -136,7 +139,6 @@ function RenderSpesificSoal(jenis, pilihan, onAnswer, onNext,checkQuestionNumber
                     <RenderButton />
                 </View>)
         case 'checkbox':
-
             return (
                 <View>
                     <ListItem>
