@@ -4,8 +4,8 @@ import { BackHandler } from "react-native";
 import AsyncStorage from '@react-native-community/async-storage';
 
 
-function RenderSpesificSoal(jenis, pilihan, onAnswer, onNext,checkQuestionNumber) {
-    const DEFAULT_CHECKBOX =[
+function RenderSpesificSoal(jenis, pilihan, onAnswer, onNext, checkQuestionNumber) {
+    const DEFAULT_CHECKBOX = [
         {
             key: '0',
             value: false
@@ -23,13 +23,15 @@ function RenderSpesificSoal(jenis, pilihan, onAnswer, onNext,checkQuestionNumber
             value: false
         },
     ];
-    const DEFAULT_RADIO=[false,false];
-   
+    const DEFAULT_RADIO = [false, false];
+    const DEFAULT_RADIO_FOUR = [false, false, false, false];
+
 
     let [answer, setAnswer] = useState(DEFAULT_CHECKBOX);
     let [test, setTest] = useState(false);
-    let [radio,setRadio]=useState(DEFAULT_RADIO);
-    let [essay,setEssay]=useState('');
+    let [radio, setRadio] = useState(DEFAULT_RADIO);
+    let [radioFour, setRadioFour] = useState(DEFAULT_RADIO_FOUR);
+    let [essay, setEssay] = useState('');
 
     const RenderButton = () => {
         if (!checkQuestionNumber) {
@@ -46,18 +48,31 @@ function RenderSpesificSoal(jenis, pilihan, onAnswer, onNext,checkQuestionNumber
         else {
             return (
                 <Button onPress={() => {
+                    if (jenis === 'pilihan_ganda') {
+                        onAnswer(radioFour);
+                    }
+                    else if (jenis === 'yesno') {
+                        onAnswer(radio);
+                    }
+                    else if (jenis === 'isian') {
+                        onAnswer(essay);
+                    }
+                    else {
+                        onAnswer(answer);
+                    }
                     setRadio(DEFAULT_RADIO);
                     setAnswer(DEFAULT_CHECKBOX);
                     setEssay('');
-                return onNext();
+                    setRadioFour(DEFAULT_RADIO_FOUR);
+                    return onNext();
                 }}>
                     <Text>
                         Next
                         </Text>
                 </Button>
             )
-        }        
-    }    
+        }
+    }
     switch (jenis) {
 
         case 'pilihan_ganda':
@@ -69,8 +84,14 @@ function RenderSpesificSoal(jenis, pilihan, onAnswer, onNext,checkQuestionNumber
                         </Left>
                         <Right>
                             <Radio onPress={() => {
-                                return onAnswer('A')
-                            }} />
+                                let temp = radioFour;
+                                temp[0] = true;
+                                temp[1] = false;
+                                temp[2] = false;
+                                temp[3] = false;
+                                setRadioFour(temp);
+                                setTest(!test);
+                            }} selected={radioFour[0]} />
                         </Right>
                     </ListItem>
                     <ListItem>
@@ -79,8 +100,14 @@ function RenderSpesificSoal(jenis, pilihan, onAnswer, onNext,checkQuestionNumber
                         </Left>
                         <Right>
                             <Radio onPress={() => {
-                                return onAnswer('B')
-                            }} />
+                                let temp = radioFour;
+                                temp[0] = false;
+                                temp[1] = true;
+                                temp[2] = false;
+                                temp[3] = false;
+                                setRadioFour(temp);
+                                setTest(!test);
+                            }} selected={radioFour[1]} />
                         </Right>
                     </ListItem>
                     <ListItem>
@@ -89,8 +116,14 @@ function RenderSpesificSoal(jenis, pilihan, onAnswer, onNext,checkQuestionNumber
                         </Left>
                         <Right>
                             <Radio onPress={() => {
-                                return onAnswer('C')
-                            }} />
+                                let temp = radioFour;
+                                temp[0] = false;
+                                temp[1] = false;
+                                temp[2] = true;
+                                temp[3] = false;
+                                setRadioFour(temp);
+                                setTest(!test);
+                            }} selected={radioFour[2]} />
                         </Right>
                     </ListItem>
                     <ListItem>
@@ -99,8 +132,14 @@ function RenderSpesificSoal(jenis, pilihan, onAnswer, onNext,checkQuestionNumber
                         </Left>
                         <Right>
                             <Radio onPress={() => {
-                                return onAnswer('D')
-                            }} />
+                                let temp = radioFour;
+                                temp[0] = false;
+                                temp[1] = false;
+                                temp[2] = false;
+                                temp[3] = true;
+                                setRadioFour(temp);
+                                setTest(!test);
+                            }} selected={radioFour[3]} />
                         </Right>
                     </ListItem>
                     <RenderButton />
@@ -115,12 +154,11 @@ function RenderSpesificSoal(jenis, pilihan, onAnswer, onNext,checkQuestionNumber
                         <Right>
                             <Radio onPress={() => {
                                 let temp = radio;
-                                temp[0]=true;
-                                temp[1]=false;
+                                temp[0] = true;
+                                temp[1] = false;
                                 setRadio(temp);
                                 setTest(!test);
-                                return onAnswer('Yes')
-                            }} selected={radio[0]}/>
+                            }} selected={radio[0]} />
                         </Right>
                     </ListItem>
                     <ListItem>
@@ -130,12 +168,12 @@ function RenderSpesificSoal(jenis, pilihan, onAnswer, onNext,checkQuestionNumber
                         <Right>
                             <Radio onPress={() => {
                                 let temp = radio;
-                                temp[0]=false;
-                                temp[1]=true;
+                                temp[0] = false;
+                                temp[1] = true;
                                 setRadio(temp);
                                 setTest(!test);
-                                return onAnswer('No')
-                            }} selected={radio[1]}/>
+
+                            }} selected={radio[1]} />
                         </Right>
                     </ListItem>
                     <RenderButton />
@@ -148,8 +186,8 @@ function RenderSpesificSoal(jenis, pilihan, onAnswer, onNext,checkQuestionNumber
                         <Text>Answer </Text>
                         <Input bordered onChangeText={data => {
                             setEssay(data);
-                            return onAnswer(data);
-                        }} value={essay}/>
+
+                        }} value={essay} />
                     </ListItem>
                     <RenderButton />
                 </View>)
@@ -162,7 +200,7 @@ function RenderSpesificSoal(jenis, pilihan, onAnswer, onNext,checkQuestionNumber
                             temp[0].value = !temp[0].value;
                             setAnswer(temp);
                             setTest(!test);
-                            return onAnswer(answer);
+
                         }} />
                         <Body>
                             <Text>{pilihan.pilihanCB1}</Text>
@@ -174,7 +212,7 @@ function RenderSpesificSoal(jenis, pilihan, onAnswer, onNext,checkQuestionNumber
                             temp[1].value = !temp[1].value;
                             setAnswer(temp);
                             setTest(!test);
-                            return onAnswer(answer);
+
                         }} />
                         <Body>
                             <Text>{pilihan.pilihanCB2}</Text>
@@ -186,7 +224,7 @@ function RenderSpesificSoal(jenis, pilihan, onAnswer, onNext,checkQuestionNumber
                             temp[2].value = !temp[2].value;
                             setAnswer(temp);
                             setTest(!test);
-                            return onAnswer(answer);
+
                         }} />
                         <Body>
                             <Text>{pilihan.pilihanCB3}</Text>
@@ -198,7 +236,7 @@ function RenderSpesificSoal(jenis, pilihan, onAnswer, onNext,checkQuestionNumber
                             temp[3].value = !temp[3].value;
                             setAnswer(temp);
                             setTest(!test);
-                            return onAnswer(answer);
+
                         }} />
                         <Body>
                             <Text>{pilihan.pilihanCB4}</Text>
@@ -232,11 +270,11 @@ function RenderSoal(props) {
         }
     }
 
-    function checkQuestionNumber(){
-        if (counter === props.data.length-1){
+    function checkQuestionNumber() {
+        if (counter === props.data.length - 1) {
             return false;
         }
-        else{
+        else {
             return true;
         }
     }
@@ -246,7 +284,8 @@ function RenderSoal(props) {
     }
 
     function onAnswer(data) {
-        console.log(data);
+        answer.push(data);
+        console.log(answer);
     }
     return (
         <View>
@@ -254,7 +293,7 @@ function RenderSoal(props) {
             <Text>
                 {props.data[counter].pertanyaan_kuisioner}
             </Text>
-            {RenderSpesificSoal(props.data[counter].jenis_pertanyaan, props.data[counter], onAnswer, onNext,checkQuestionNumber())}
+            {RenderSpesificSoal(props.data[counter].jenis_pertanyaan, props.data[counter], onAnswer, onNext, checkQuestionNumber())}
 
         </View>
     )
