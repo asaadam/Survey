@@ -22,11 +22,13 @@ function RenderSpesificSoal(jenis, pilihan, onAnswer, onNext,checkQuestionNumber
             key: '3',
             value: false
         },
-    ]
+    ];
+    const DEFAULT_RADIO=[false,false];
    
 
     let [answer, setAnswer] = useState(DEFAULT_CHECKBOX);
     let [test, setTest] = useState(false);
+    let [radio,setRadio]=useState(DEFAULT_RADIO);
 
 
     const RenderButton = () => {
@@ -44,7 +46,8 @@ function RenderSpesificSoal(jenis, pilihan, onAnswer, onNext,checkQuestionNumber
         else {
             return (
                 <Button onPress={() => {
-                    setAnswer(DEFAULT_CHECKBOX)
+                    setRadio(DEFAULT_RADIO);
+                    setAnswer(DEFAULT_CHECKBOX);
                 return onNext();
                 }}>
                     <Text>
@@ -110,8 +113,13 @@ function RenderSpesificSoal(jenis, pilihan, onAnswer, onNext,checkQuestionNumber
                         </Left>
                         <Right>
                             <Radio onPress={() => {
+                                let temp = radio;
+                                temp[0]=true;
+                                temp[1]=false;
+                                setRadio(temp);
+                                setTest(!test);
                                 return onAnswer('Yes')
-                            }} />
+                            }} selected={radio[0]}/>
                         </Right>
                     </ListItem>
                     <ListItem>
@@ -120,8 +128,13 @@ function RenderSpesificSoal(jenis, pilihan, onAnswer, onNext,checkQuestionNumber
                         </Left>
                         <Right>
                             <Radio onPress={() => {
+                                let temp = radio;
+                                temp[0]=false;
+                                temp[1]=true;
+                                setRadio(temp);
+                                setTest(!test);
                                 return onAnswer('No')
-                            }} />
+                            }} selected={radio[1]}/>
                         </Right>
                     </ListItem>
                     <RenderButton />
