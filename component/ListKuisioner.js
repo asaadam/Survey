@@ -4,7 +4,8 @@ import { BackHandler } from "react-native";
 import AsyncStorage from '@react-native-community/async-storage';
 
 
-function RenderSpesificSoal(jenis, pilihan, onAnswer, onNext, checkQuestionNumber) {
+function RenderSpesificSoal(jenis, pilihan, onAnswer, onNext, checkQuestionNumber, answerData) {
+    console.log(answerData);
     const DEFAULT_CHECKBOX = [
         {
             key: '0',
@@ -33,6 +34,29 @@ function RenderSpesificSoal(jenis, pilihan, onAnswer, onNext, checkQuestionNumbe
     let [radioFour, setRadioFour] = useState(DEFAULT_RADIO_FOUR);
     let [essay, setEssay] = useState('');
 
+    useEffect(() => {
+        if (answerData != null) {
+            switch (answerData.tipe) {
+                case "checkbox":
+                    setAnswer(answerData.answer)
+                    setTest(!test)
+                    break;
+                case "pilihan_ganda":
+                    setRadioFour(answerData.answer)
+                    setTest(!test)
+                    break;
+                case "yesno": setRadio(answer.answer)
+                    setTest(!test)
+                    break;
+                default: setEssay(answerData.answer)
+                    setTest(!test)
+                    break;
+            }
+        }
+
+    }, [answerData]);
+
+    
     const RenderButton = () => {
         if (!checkQuestionNumber) {
             return (
@@ -269,7 +293,6 @@ function RenderSoal(props) {
             return true;
         }
     }
-
     function checkQuestionNumber() {
         if (counter === props.data.length - 1) {
             return false;
@@ -278,14 +301,16 @@ function RenderSoal(props) {
             return true;
         }
     }
-
     function onNext() {
         setCounter(++counter);
     }
 
     function onAnswer(data) {
-        answer.push(data);
-        console.log(answer);
+        let item = {
+            tipe: props.data[counter].jenis_pertanyaan,
+            answer: data
+        }
+        answer.push(item);
     }
     return (
         <View>
@@ -293,7 +318,7 @@ function RenderSoal(props) {
             <Text>
                 {props.data[counter].pertanyaan_kuisioner}
             </Text>
-            {RenderSpesificSoal(props.data[counter].jenis_pertanyaan, props.data[counter], onAnswer, onNext, checkQuestionNumber())}
+            {RenderSpesificSoal(props.data[counter].jenis_pertanyaan, props.data[counter], onAnswer, onNext, checkQuestionNumber(),answer[counter])}
 
         </View>
     )
@@ -303,16 +328,12 @@ function RenderSoal(props) {
 
 export default function ListKuisioner(props) {
     let [soal, setSoal] = useState();
-    let [counter, setCounter] = useState(0);
 
     async function getData() {
         let data = await AsyncStorage.getItem(props.type);
         let parse = JSON.parse(data);
         setSoal(parse);
     }
-
-
-
     useEffect(() => {
         getData();
     }, []);
